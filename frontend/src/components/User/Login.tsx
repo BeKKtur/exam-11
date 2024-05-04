@@ -1,22 +1,20 @@
 import React, {useState} from "react";
-import {RegisterMutation} from "../../types";
-import {Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typography} from "@mui/material";
+import {LoginMutation} from "../../types";
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
+import {Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typography} from "@mui/material";
+import LockOpenIcon from "@mui/icons-material/LockOpen"
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {selectUserError} from "./userSlice";
-import {register} from "./userThunk";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
+import {selectLoginError} from "./userSlice";
+import {login} from "./userThunk";
 
-const Register = () => {
+const Login = () => {
     const dispatch = useAppDispatch();
-    const error = useAppSelector(selectUserError);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const error = useAppSelector(selectLoginError);
 
-    const [state, setState] = useState<RegisterMutation>({
+    const [state, setState] = useState<LoginMutation>({
         username: '',
         password: '',
-        displayName: '',
-        phoneNumber: '',
     });
 
     const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement> ) => {
@@ -29,7 +27,7 @@ const Register = () => {
     const submitFormHandler = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await dispatch(register(state)).unwrap();
+            await dispatch(login(state)).unwrap();
             navigate('/')
         } catch (error) {
 
@@ -47,12 +45,12 @@ const Register = () => {
                 }}
             >
                 <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-                    <LockOutlinedIcon/>
+                    <LockOpenIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                {error && <Alert variant='filled' severity="error">Error!</Alert>}
+                {error && <Alert severity='error' sx={{mt: 5, width: '100%'}}>{error.error}</Alert>}
                 <Box component="form" noValidate onSubmit={submitFormHandler} sx={{mt: 3}}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
@@ -61,8 +59,8 @@ const Register = () => {
                                 label="Username"
                                 name="username"
                                 autoComplete="new-username"
-                                onChange={inputChangeHandler}
                                 value={state.username}
+                                onChange={inputChangeHandler}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -76,28 +74,6 @@ const Register = () => {
                                 onChange={inputChangeHandler}
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                name="displayName"
-                                label="display name"
-                                type="text"
-                                autoComplete="new-displayName"
-                                value={state.displayName}
-                                onChange={inputChangeHandler}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                name="phoneNumber"
-                                label="phone number"
-                                type="tel"
-                                autoComplete="new-phone"
-                                value={state.phoneNumber}
-                                onChange={inputChangeHandler}
-                            />
-                        </Grid>
                     </Grid>
                     <Button
                         type="submit"
@@ -105,12 +81,13 @@ const Register = () => {
                         variant="contained"
                         sx={{mt: 3, mb: 2}}
                     >
-                        register
+                        Sign Up
                     </Button>
+
                     <Grid container justifyContent="flex-end">
                         <Grid item>
-                            <Link component={RouterLink} to="/login" variant="body2">
-                                Already have an account? Sign in
+                            <Link component={RouterLink} to="/register" variant="body2">
+                                or register
                             </Link>
                         </Grid>
                     </Grid>
@@ -120,4 +97,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default Login;

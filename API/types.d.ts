@@ -7,14 +7,24 @@ export interface User {
 }
 
 export interface Items {
-    name: string;
-    photo: string;
-    price: number;
+    title: string;
+    description: string;
+    category: string
+    price: string;
+    user: string;
+    phoneNumber: number;
 }
 
 interface UserMethods {
     checkPassword(password: string): Promise<boolean>;
     generateToken(): void;
 }
+
+interface ItemMethods {
+    username(username: string): Promise<boolean>;
+    phone(phone: number): Promise<boolean>;
+}
+
+export type ItemModel = Model<Items, {}, ItemMethods>
 
 export type UserModel = Model<User, {}, UserMethods>

@@ -3,7 +3,7 @@ import userModel from "../Models/user";
 
 const userRouter = express.Router();
 
-userRouter.post('/', async (req, res, next) => {
+userRouter.post('/register', async (req, res, next) => {
     try {
         const user = new userModel({
             username: req.body.username,
@@ -37,7 +37,7 @@ userRouter.post('/sessions', async (req, res, next) => {
         user.generateToken();
         await user.save();
 
-        return res.send(user);
+        return res.send({message: "Username and password correct", user});
     } catch (e) {
         next(e)
     }

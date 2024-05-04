@@ -1,5 +1,9 @@
-import {AppBar, Button, Grid, styled, Toolbar, Typography} from "@mui/material";
+import {AppBar, Grid, styled, Toolbar, Typography} from "@mui/material";
 import {NavLink} from "react-router-dom";
+import {useAppSelector} from "../../app/hooks";
+import {selectUser} from "../User/userSlice";
+import UserMenu from "./UserMenu";
+import AnonymousMenu from "./AnonymousMenu";
 
 const LogoLink = styled(NavLink)({
     color: 'inherit',
@@ -10,6 +14,9 @@ const LogoLink = styled(NavLink)({
 })
 
 const AppToolbar = () => {
+    const user = useAppSelector(selectUser);
+
+
     return (
         <AppBar>
             <Toolbar>
@@ -17,9 +24,12 @@ const AppToolbar = () => {
                     <Typography variant="h6" component='div'>
                         <LogoLink to='/'>Flea Market</LogoLink>
                     </Typography>
-                    <Button component={NavLink} to="/register" color='inherit'>
-                        Sign up
-                    </Button>
+                    <Grid item>
+                        {user ? (
+                            <UserMenu user={user}/>
+                        ) : (<AnonymousMenu/>)
+                        }
+                    </Grid>
                 </Grid>
             </Toolbar>
         </AppBar>
