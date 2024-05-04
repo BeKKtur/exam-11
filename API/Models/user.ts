@@ -34,6 +34,13 @@ const userSchema = new Schema<User, UserModel, UserMethods>({
     }
 }, {versionKey: false});
 
+userSchema.set('toJSON',{
+    transform:(_doc, ret, _options) => {
+        delete ret.password;
+        return ret
+    }
+})
+
 userSchema.methods.checkPassword = function (password) {
     return bcrypt.compare(password, this.password);
 };
